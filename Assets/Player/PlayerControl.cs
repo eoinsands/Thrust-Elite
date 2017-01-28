@@ -94,46 +94,29 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	void FindStartPosition(){
-		int startY;
-		int startX=TerrainGenerator.xSizeInTiles/2;
+		// Find landing platform and place ship above it
+		GameObject landPlatform = GameObject.FindGameObjectWithTag("Platform");
+		transform.position = landPlatform.transform.position+ new Vector3 (0, 0.9f, -0.65f);
 
-		for (startY=1;startY<TerrainGenerator.ySizeInTiles; startY++){
-			if (terrain.tileValue[startX, startY]==0){
-				break;
-			}
-		}
-		if (startY==TerrainGenerator.ySizeInTiles-1){
-			Debug.Log ("No free space along entrance channel!");
-		}
-		else {
-			transform.position=new Vector3 (startX, startY+2, 0f);
-			//Debug.Log (startX +" " +startY);
-			//Debug.Log ("Outside Terran, 32,0 is " +terrain.tileValue[32,0]);
-		}
 	}
 
-		void OnCollisionEnter(Collision collision){
+	void OnCollisionEnter(Collision collision){
 		float impactSpeed = collision.relativeVelocity.magnitude;
 
-			if (impactSpeed>7.0){
-				TakeDamage(impactSpeed, collision.collider.tag);
-			}
-			//Debug.Log(collision.collider.name);
-			//Debug.Log(collision.collider.name);
+		if (impactSpeed>7.0){
+			TakeDamage(impactSpeed, collision.collider.tag);
 		}
+			//Debug.Log(collision.collider.name);
+			//Debug.Log(collision.collider.name);
+	}
 
-		void TakeDamage(float impactSpeed, string impactType){
+	void TakeDamage(float impactSpeed, string impactType){
 			//sparks.Play();
 			//Debug.Log("Smash!");
 			health -= impactSpeed;
 
-		}
-
-		void FireWeapon(){
-
-			
+	}
 
 
-		}
 
 }

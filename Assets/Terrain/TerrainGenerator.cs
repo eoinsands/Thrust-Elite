@@ -9,6 +9,7 @@ public class TerrainGenerator : MonoBehaviour {
 	public const int ySizeInTiles=128;
 	//public Sprite terrainSprite; // In futher adaption, this will be an array of sprites
 	public GameObject terrainCube;
+	public GameObject basePlatform;
 	public float initialTileThreshold=0.45f; //Probability of tile being generated in initial spawn
 	public Text text;
 
@@ -28,6 +29,7 @@ public class TerrainGenerator : MonoBehaviour {
 		CreateTerrain();
 		//Debug.Log ("Instantiate Time: " + Time.realtimeSinceStartup);
 		//Debug.Log ("Inside Terran, 32,0 is " + tileValue[32,0]);
+		CreateBase();
 	}
 	
 	// Update is called once per frame
@@ -161,6 +163,28 @@ public class TerrainGenerator : MonoBehaviour {
 	void DestroyTerrain(){
 		foreach (Transform cube in transform){
 			Destroy (cube.gameObject);
+		}
+	}
+
+	void CreateBase(){
+		int startY;
+		int startX=xSizeInTiles/2;
+
+		for (startY=1;startY<ySizeInTiles; startY++){
+			// Look for three free horizontal tiles in a row
+			if (tileValue[startX, startY]+tileValue[startX-1, startY]+tileValue[startX+1, startY]==0){
+				break;
+			}
+		}
+		if (startY==ySizeInTiles-1){
+			Debug.Log ("No free space along entrance channel!");
+		}
+		else {
+			
+			Instantiate (basePlatform, new Vector3((float)startX, (float)startY-0.18f, 0.65f), Quaternion.Euler(new Vector3(-90,90,0)));
+			//transform.position=new Vector3 (startX, startY, 0f);
+			//Debug.Log (startX +" " +startY);
+			//Debug.Log ("Outside Terran, 32,0 is " +terrain.tileValue[32,0]);
 		}
 	}
 
