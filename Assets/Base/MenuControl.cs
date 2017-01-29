@@ -10,15 +10,26 @@ public class MenuControl : MonoBehaviour {
 
 	public float maxAlpha=0.5f;
 	public float fadeSpeed=1;
-
-	Image[] images;
-	Text[] texts;
 	public bool fadeIn, fadeOut;
+	public AudioClip[] clips;
+
+	AudioSource audiosource;
+	//Image[] images;
+	//Text[] texts;
+	CanvasGroup canvasGroup;
+	public GameObject market, wStore, bBoard;
+
+	enum SoundEffects {Click, Accept};
 
 	// Use this for initialization
 	void Start () {
-		images = GetComponentsInChildren<Image>();
-		texts = GetComponentsInChildren<Text>();
+		//images = GetComponentsInChildren<Image>();
+		//texts = GetComponentsInChildren<Text>();
+		audiosource=GetComponent<AudioSource>();
+		canvasGroup = GetComponent<CanvasGroup>();
+		//market = GameObject.FindGameObjectWithTag("Market");
+		//wStore = GameObject.FindGameObjectWithTag("WStore");
+		//bBoard = GameObject.FindGameObjectWithTag("BBoard");
 		//gameObject.SetActive(false);
 	}
 	
@@ -38,40 +49,70 @@ public class MenuControl : MonoBehaviour {
 			gameObject.SetActive (true);
 		}
 		fadeOut=false;
-		Color color = images[0].color;
-		color.a = Mathf.Lerp (color.a, maxAlpha, fadeSpeed*Time.deltaTime);
-		if (color.a >= maxAlpha*0.9){
+
+		float fade = canvasGroup.alpha;
+		fade = Mathf.Lerp (fade, maxAlpha, fadeSpeed*Time.deltaTime);
+		if (fade >= maxAlpha*0.9){
 			fadeIn=false;
 		}
 
-		foreach (Image image in images){
-			image.color=color;
-		}
-		foreach (Text text in texts){
-			text.color=color;
-		}
+		canvasGroup.alpha=fade;
+
 
 	}
 
 	void FadeOut(){
+		
 		fadeIn=false;
-		Color color = images[0].color;
-		color.a = Mathf.Lerp (color.a, 0, fadeSpeed*Time.deltaTime);
 
-		if (color.a <= 0.01){
+		float fade = canvasGroup.alpha;
+		fade = Mathf.Lerp (fade, 0, fadeSpeed*Time.deltaTime);
+		if (fade <= 0.01){
 			fadeOut=false;
-			gameObject.SetActive (false);
+			gameObject.SetActive(false);
 		}
-		foreach (Image image in images){
-			image.color=color;
-		}
-		foreach (Text text in texts){
-			text.color=color;
-		}
+
+		canvasGroup.alpha=fade;
+
 
 	}
 
+	void Click(){
+		audiosource.clip=clips[0];
+		audiosource.Play();
+	}
+
+	public void ActivateBBoard(){
+		Click();
+		wStore.SetActive(false);
+		market.SetActive(false);
+		bBoard.SetActive(true);
+	}
+
+	public void ActivateWStore(){
+		Click();
+		wStore.SetActive(true);
+		market.SetActive(false);
+		bBoard.SetActive(false);
+	}
+
+	public void ActivateMarket(){
+		Click();
+		wStore.SetActive(false);
+		market.SetActive(true);
+		bBoard.SetActive(false);
+	}
+
 	public void CloseMenu(){
+		Click();
+		fadeOut=true;
+		GameObject.FindObjectOfType<PlayerControl>().inMenu=false;
+	}
+
+	public void AcceptMission(){
+		Click();
+		AudioSource musicManager=GameObject.FindGameObjectWithTag("MusicManager").GetComponent<AudioSource>();
+		musicManager.Play();
 		fadeOut=true;
 		GameObject.FindObjectOfType<PlayerControl>().inMenu=false;
 	}

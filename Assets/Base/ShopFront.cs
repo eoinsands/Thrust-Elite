@@ -22,11 +22,8 @@ public class ShopFront : MonoBehaviour {
 	public void OpenShopFront(){
 		//portMenu.SetActive(true);
 		Debug.Log("Open For Business!!");
-		Debug.Log (portMenu.name);	
-		//Debug.Log (portMenu.activeSelf);
 
-		//portMenu.SetActive (true);
-		//portMenu.GetComponent<FadeControl>().fadeIn=true;
+
 	}
 
 }
