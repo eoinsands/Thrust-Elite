@@ -22,6 +22,7 @@ public class PlayerControl : MonoBehaviour {
 	public float maxSpeed=15f;
 	public float maxHealth=100f;
 	public Slider healthSlider;
+	public bool inMenu=false;
 
 	AudioSource audiosource;
 	IWeapon weapon;
@@ -49,26 +50,30 @@ public class PlayerControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// Turn left and right
-		transform.Rotate (Vector3.up*Input.GetAxis("Horizontal")*rotateSpeed);
+		
+		if (!inMenu){
+			// Turn left and right
+			transform.Rotate (Vector3.up*Input.GetAxis("Horizontal")*rotateSpeed);
 
-		// Fire Thrusters
-		if (Input.GetButton("Fire1")){
-			FireThrusters();
-		} else {
-			StopThrusters();
+			// Fire Thrusters
+			if (Input.GetButton("Fire1")){
+				FireThrusters();
+			} else {
+				StopThrusters();
+			}
+
+			// Fire Guns
+			if (Input.GetButtonDown("Fire2")){
+				weapon.StartFire();
+			} else if (Input.GetButton("Fire2")){
+				weapon.FireWeapon(new Ray(transform.position, transform.forward));
+			}
+
+			if (Input.GetButtonUp("Fire2")){
+				weapon.StopFire();
+			}
 		}
 
-		// Fire Guns
-		if (Input.GetButtonDown("Fire2")){
-			weapon.StartFire();
-		} else if (Input.GetButton("Fire2")){
-			weapon.FireWeapon(new Ray(transform.position, transform.forward));
-		}
-
-		if (Input.GetButtonUp("Fire2")){
-			weapon.StopFire();
-		}
 
 		//Clamp Max Speed
 		rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxSpeed);
