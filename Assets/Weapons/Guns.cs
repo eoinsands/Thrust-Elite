@@ -30,20 +30,24 @@ public class Guns : MonoBehaviour, IWeapon {
 	}
 
 	public void FireWeapon(Ray gunRay){
+			
 			// Only start firing if gun has had enough time to windup
 			if (Time.time-startWindupTime>=clips[0].length && startWindupTime!=0){
 
 				RaycastHit hitInfo;
 				//Vector3 dest = transform.position+ transform.forward*20.0f;
 				//Debug.Log ("Position: " + transform.position + "    Forward Vector: " + dest);
-				Debug.DrawRay (transform.position, transform.forward*20, Color.white);
+				Debug.DrawRay (transform.position, gunRay.direction*20, Color.white);
 	
 				if (Physics.Raycast (gunRay, out hitInfo, gunsRange)){
-					
-					GameObject tempSparks = Instantiate (sparks, hitInfo.point, Quaternion.identity);
-					Destroy (tempSparks, 0.3f);
-					IDestructable target = hitInfo.transform.GetComponent<IDestructable>();
-					target.TakeFire(gunDamage);
+					//Debug.Log (hitInfo.transform.name);
+					if (hitInfo.transform.GetComponent<IDestructable>()!=null){
+						//Debug.Log ("Hitting Something");
+						GameObject tempSparks = Instantiate (sparks, hitInfo.point, Quaternion.identity);
+						Destroy (tempSparks, 0.3f);
+						IDestructable target = hitInfo.transform.GetComponent<IDestructable>();
+						target.TakeFire(gunDamage);
+					}
 
 				}
 

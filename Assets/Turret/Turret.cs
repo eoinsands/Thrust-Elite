@@ -5,10 +5,14 @@ using UnityEngine;
 public class Turret : MonoBehaviour, IDestructable {
 
 	public float health=10.0f;
+	public AudioClip[] clips;
+
+	float audioDelay=0;
+	AudioSource audioSource;
 
 	// Use this for initialization
 	void Start () {
-		
+		audioSource=GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -16,7 +20,22 @@ public class Turret : MonoBehaviour, IDestructable {
 		
 	}
 
+	void playRicochet(){
+		if (audioDelay<=0){
+			int ricNoise=Random.Range(0, 50);
+			if (ricNoise<=clips.Length){
+				audioSource.clip=clips[ricNoise];
+				audioSource.Play();
+				audioDelay=clips[ricNoise].length;
+			}
+		} else {
+			audioDelay-=Time.deltaTime;
+		}
+
+	}
+
 	public void TakeFire(float damage){
+		
 		health-=damage;
 		if (health<=0){
 			Destroy(gameObject);

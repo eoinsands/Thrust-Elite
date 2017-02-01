@@ -15,7 +15,7 @@ public interface IDestructable{
 }
 
 
-public class PlayerControl : MonoBehaviour {
+public class PlayerControl : MonoBehaviour, IDestructable {
 
 	public float thrust=1f;
 	public float rotateSpeed=1f;
@@ -60,6 +60,12 @@ public class PlayerControl : MonoBehaviour {
 				FireThrusters();
 			} else {
 				StopThrusters();
+			}
+
+			// Hover Mode
+			if (Input.GetButtonDown("Fire3")){
+				rigidbody.useGravity = false;//!rigidbody.useGravity;
+				Debug.Log ("Gravity off!");
 			}
 
 			// Fire Guns
