@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Guns : MonoBehaviour, IWeapon {
 
-	public float gunsRange=20f;
-	public float gunDamage=0.1f;
+	public float range=20f;
+	public float damage=0.1f;
 	public GameObject sparks;
 	public AudioClip[] clips;
 
@@ -21,6 +21,10 @@ public class Guns : MonoBehaviour, IWeapon {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public float Range(){
+		return range;
 	}
 
 	public void StartFire(){
@@ -39,14 +43,15 @@ public class Guns : MonoBehaviour, IWeapon {
 				//Debug.Log ("Position: " + transform.position + "    Forward Vector: " + dest);
 				Debug.DrawRay (transform.position, gunRay.direction*20, Color.white);
 	
-				if (Physics.Raycast (gunRay, out hitInfo, gunsRange)){
-					//Debug.Log (hitInfo.transform.name);
-					if (hitInfo.transform.GetComponent<IDestructable>()!=null){
-						//Debug.Log ("Hitting Something");
+				if (Physics.Raycast (gunRay, out hitInfo, range)){
+					Debug.Log (hitInfo.transform.name);
+					Debug.Log (hitInfo.collider.name);
+					if (hitInfo.collider.GetComponent<IDestructable>()!=null){
+						Debug.Log ("Hitting Something");
 						GameObject tempSparks = Instantiate (sparks, hitInfo.point, Quaternion.identity);
 						Destroy (tempSparks, 0.3f);
-						IDestructable target = hitInfo.transform.GetComponent<IDestructable>();
-						target.TakeFire(gunDamage);
+						IDestructable target = hitInfo.collider.GetComponent<IDestructable>();
+						target.TakeFire(damage*Time.deltaTime, hitInfo);
 					}
 
 				}

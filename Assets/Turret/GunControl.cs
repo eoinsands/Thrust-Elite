@@ -52,10 +52,10 @@ public class GunControl : MonoBehaviour {
 		Vector2 targetRay=target.transform.position-transform.position;
 		float targetAngle = Vector2.Angle (Vector2.up, targetRay);
 		float targetRange = targetRay.magnitude;
-		Debug.Log ("Searching");
+		//Debug.Log ("Searching");
 		//Debug.Log ("Upper Angle: " + upperAngle + " Lower Angle: " + lowerAngle + " Target Angle: " + targetAngle + " Target Range: " + targetRange);
-		Debug.DrawRay(transform.position, upperScan);
-		Debug.DrawRay(transform.position, lowerScan);
+		//Debug.DrawRay(transform.position, upperScan);
+		//Debug.DrawRay(transform.position, lowerScan);
 		targeting=false;
 		// First check correct direction
 		if (transform.position.x <=target.transform.position.x){

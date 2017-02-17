@@ -81,6 +81,8 @@ public class TerrainGenerator : MonoBehaviour {
 		for (int loopB=0; loopB <loopBIterations; loopB++){
 			AlgorithmB();
 		}
+
+		MakeExit();
 	}
 
 	void InitialSeed(){
@@ -123,6 +125,14 @@ public class TerrainGenerator : MonoBehaviour {
 
 	}
 
+	void MakeExit(){
+		for (int x=(xSizeInTiles/2)-5; x<=(xSizeInTiles/2)+5; x++) {
+			for (int y=ySizeInTiles-5; y<=ySizeInTiles-1; y++) {
+				tileValue[x,y]=0;
+			}
+		}
+	}
+
 	void SwapTemp(){
 		for (int x=1; x<xSizeInTiles-1;x++){
 			for (int y=1; y<ySizeInTiles-1;y++){
@@ -150,6 +160,9 @@ public class TerrainGenerator : MonoBehaviour {
 		int xOffset=0, yOffset=0;
 
 		for (int x=0; x<xSizeInTiles;x++){
+			for (int y=-10; y<0; y++){
+				Instantiate (terrainCube, new Vector3(x+xOffset,y+yOffset,0), Quaternion.identity, transform);
+			}
 			for (int y=0; y<ySizeInTiles;y++){
 				if (tileValue[x,y]>0&&tileValue[x,y]<=9){
 					Instantiate (terrainCube, new Vector3(x+xOffset,y+yOffset,0), Quaternion.identity, transform);

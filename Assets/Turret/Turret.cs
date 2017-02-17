@@ -34,7 +34,7 @@ public class Turret : MonoBehaviour, IDestructable {
 
 	}
 
-	public void TakeFire(float damage){
+	public void TakeFire(float damage, RaycastHit hitInfo){
 		
 		health-=damage;
 		if (health<=0){

@@ -7,10 +7,11 @@ public interface IWeapon{
 	void StartFire();
 	void FireWeapon(Ray fireRay);
 	void StopFire();
+	float Range();
 }
 
 public interface IDestructable{
-	void TakeFire(float damage);
+	void TakeFire(float damage, RaycastHit hitInfo);
 
 }
 
@@ -23,29 +24,34 @@ public class PlayerControl : MonoBehaviour, IDestructable {
 	public float maxHealth=100f;
 	public Slider healthSlider;
 	public bool inMenu=false;
+	public bool shieldsUp;
 
 	AudioSource audiosource;
 	IWeapon weapon;
 	TerrainGenerator terrain;
 	Rigidbody rigidbody;
 	ParticleSystem thruster;
-	float health;
+	Shield shield;
+	public float health;
 	bool thrusting=false;
 
 	// Use this for initialization
 	void Start () {
 		rigidbody=GetComponent<Rigidbody>();
 		thruster=GetComponentsInChildren<ParticleSystem>()[0];
+		shield=GetComponentInChildren<Shield>();
 		terrain=GameObject.FindObjectOfType<TerrainGenerator>();
-		healthSlider=GameObject.FindObjectOfType<Slider>();
+		//healthSlider=GameObject.FindObjectsOfType<Slider>()[0];
 		weapon = GetComponentInChildren<IWeapon>();
 		audiosource=GetComponent<AudioSource>();
 
 		health=maxHealth;
+		healthSlider.maxValue=maxHealth;
+
 		thruster.Stop();
 
-		FindStartPosition();
-
+		//FindStartPosition();
+		rigidbody.useGravity=false;
 	}
 	
 	// Update is called once per frame
@@ -64,7 +70,7 @@ public class PlayerControl : MonoBehaviour, IDestructable {
 
 			// Hover Mode
 			if (Input.GetButtonDown("Fire3")){
-				rigidbody.useGravity = false;//!rigidbody.useGravity;
+				rigidbody.useGravity = !rigidbody.useGravity;
 				Debug.Log ("Gravity off!");
 			}
 
@@ -96,6 +102,8 @@ public class PlayerControl : MonoBehaviour, IDestructable {
 		}
 		//Debug.Log(transform.forward);
 		rigidbody.AddForce(transform.forward*thrust);
+		//Once you start thrusting, antigrav is disabled
+		rigidbody.useGravity = true;
 	}
 
 	void StopThrusters(){
@@ -111,23 +119,41 @@ public class PlayerControl : MonoBehaviour, IDestructable {
 
 	}
 
+	void OnTriggerEnter (Collider collider){
+		if (collider.transform.tag=="Gate"){
+			GateJump();
+		}
+	}
+
 	void OnCollisionEnter(Collision collision){
 		float impactSpeed = collision.relativeVelocity.magnitude;
-
+			
 		if (impactSpeed>7.0){
-			TakeDamage(impactSpeed, collision.collider.tag);
+			//TakeCollisionDamage(impactSpeed, collision.collider.tag);
 		}
 			//Debug.Log(collision.collider.name);
 			//Debug.Log(collision.collider.name);
 	}
 
-	void TakeDamage(float impactSpeed, string impactType){
+	void TakeCollisionDamage(float impactSpeed, string impactType){
 			//sparks.Play();
 			//Debug.Log("Smash!");
 			health -= impactSpeed;
 
 	}
 
+	public void TakeFire(float damage, RaycastHit hitInfo){
+		
+		health-=damage;
+		shield.lastHit = Time.time;
+		if (health<=0){
+			Destroy(gameObject);
+		}
+		
+	}
 
+	void GateJump(){
+		Debug.Log ("Jump Activated");
+	}
 
 }
