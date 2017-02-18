@@ -44,12 +44,11 @@ public class Guns : MonoBehaviour, IWeapon {
 				Debug.DrawRay (transform.position, gunRay.direction*20, Color.white);
 	
 				if (Physics.Raycast (gunRay, out hitInfo, range)){
-					Debug.Log (hitInfo.transform.name);
-					Debug.Log (hitInfo.collider.name);
+					//Debug.Log (hitInfo.transform.name);
+					//Debug.Log (hitInfo.collider.name);
+					GameObject tempSparks = Instantiate (sparks, hitInfo.point, Quaternion.identity);
+					Destroy (tempSparks, 0.3f);
 					if (hitInfo.collider.GetComponent<IDestructable>()!=null){
-						Debug.Log ("Hitting Something");
-						GameObject tempSparks = Instantiate (sparks, hitInfo.point, Quaternion.identity);
-						Destroy (tempSparks, 0.3f);
 						IDestructable target = hitInfo.collider.GetComponent<IDestructable>();
 						target.TakeFire(damage*Time.deltaTime, hitInfo);
 					}

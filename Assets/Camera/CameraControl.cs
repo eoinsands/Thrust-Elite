@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour {
 
-	public float levelBase=15.0f;
+	public float levelBase=-113.0f;
 	public float baseZoom = 30.0f;
 	public float scaleFactor = 4.0f;
 	public float zoomSpeed = 0.2f;
@@ -25,8 +25,25 @@ public class CameraControl : MonoBehaviour {
 	void Update () {
 		float camerax=player.transform.position.x;
 		float cameray=Mathf.Clamp(player.transform.position.y, levelBase, 1000);
-		float cameraz=Mathf.Lerp (-transform.position.z, baseZoom+playerBody.velocity.magnitude/scaleFactor,zoomSpeed*Time.deltaTime);
-		transform.position = new Vector3 (camerax, cameray, -cameraz);
+
+		if (camera.orthographic){
+			float scale=OrthoScale();
+			transform.position = new Vector3 (camerax, cameray, -64);
+			camera.orthographicSize=scale;
+		}
+		else {
+			float cameraz=PerspScale();
+			transform.position = new Vector3 (camerax, cameray, -cameraz);
+		}
+
+	}
+
+	float PerspScale(){
+		return Mathf.Lerp (-transform.position.z, baseZoom+playerBody.velocity.magnitude/scaleFactor,zoomSpeed*Time.deltaTime);
+	}
+
+	float OrthoScale(){
+		return Mathf.Lerp (camera.orthographicSize, baseZoom+playerBody.velocity.magnitude/(scaleFactor*2),zoomSpeed*Time.deltaTime);
 	}
 
 	float ZoomOut(float speed){

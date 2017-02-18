@@ -157,7 +157,7 @@ public class TerrainGenerator : MonoBehaviour {
 	}
 
 	void CreateTerrain(){
-		int xOffset=0, yOffset=0;
+		float xOffset=-63.5f, yOffset=-127.5f;
 
 		for (int x=0; x<xSizeInTiles;x++){
 			for (int y=-10; y<0; y++){
@@ -180,6 +180,7 @@ public class TerrainGenerator : MonoBehaviour {
 	}
 
 	void CreateBase(){
+		float xOffset=-63.5f, yOffset=-127.5f;
 		int startY;
 		int startX=xSizeInTiles/2;
 
@@ -194,7 +195,7 @@ public class TerrainGenerator : MonoBehaviour {
 		}
 		else {
 			
-			Instantiate (basePlatform, new Vector3((float)startX, (float)startY-0.18f, 0.65f), Quaternion.Euler(new Vector3(-90,90,0)));
+			Instantiate (basePlatform, new Vector3((float)startX+xOffset, (float)startY-0.18f+yOffset, 0.65f), Quaternion.Euler(new Vector3(-90,90,0)));
 			//transform.position=new Vector3 (startX, startY, 0f);
 			//Debug.Log (startX +" " +startY);
 			//Debug.Log ("Outside Terran, 32,0 is " +terrain.tileValue[32,0]);

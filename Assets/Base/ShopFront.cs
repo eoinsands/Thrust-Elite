@@ -9,19 +9,19 @@ public class ShopFront : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		portMenu=GameObject.FindGameObjectWithTag("Menu");
-		Debug.Log (portMenu.name);
+		//Debug.Log (portMenu.name);
 		//portMenu.SetActive(false);
-		Debug.Log (portMenu.name);	
+		//Debug.Log (portMenu.name);	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log (portMenu.name);	
+			
 	}
 
 	public void OpenShopFront(){
 		//portMenu.SetActive(true);
-		Debug.Log("Open For Business!!");
+		//Debug.Log("Open For Business!!");
 
 
 	}

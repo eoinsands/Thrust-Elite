@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public interface IWeapon{
 	void StartFire();
@@ -37,6 +38,7 @@ public class PlayerControl : MonoBehaviour, IDestructable {
 
 	// Use this for initialization
 	void Start () {
+		Object.DontDestroyOnLoad(gameObject);
 		rigidbody=GetComponent<Rigidbody>();
 		thruster=GetComponentsInChildren<ParticleSystem>()[0];
 		shield=GetComponentInChildren<Shield>();
@@ -50,13 +52,14 @@ public class PlayerControl : MonoBehaviour, IDestructable {
 
 		thruster.Stop();
 
-		//FindStartPosition();
-		rigidbody.useGravity=false;
+		FindStartPosition();
+		rigidbody.useGravity=true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		//Debug.DrawRay (transform.position, (Quaternion.Euler(0f, 0f, 15f)*transform.forward), Color.red);
+
 		if (!inMenu){
 			// Turn left and right
 			transform.Rotate (Vector3.up*Input.GetAxis("Horizontal")*rotateSpeed);
@@ -154,6 +157,10 @@ public class PlayerControl : MonoBehaviour, IDestructable {
 
 	void GateJump(){
 		Debug.Log ("Jump Activated");
+		int chosenGate=2;
+		if ((chosenGate!=0)&&(chosenGate!=SceneManager.GetActiveScene().buildIndex)){
+			SceneManager.LoadScene(chosenGate);
+		}
 	}
 
 }

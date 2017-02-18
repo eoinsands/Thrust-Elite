@@ -104,12 +104,14 @@ public class MenuControl : MonoBehaviour {
 	}
 
 	public void CloseMenu(){
+		Debug.Log ("Closing");
 		Click();
 		fadeOut=true;
 		GameObject.FindObjectOfType<PlayerControl>().inMenu=false;
 	}
 
 	public void AcceptMission(){
+		Debug.Log ("Accepting");
 		Click();
 		AudioSource musicManager=GameObject.FindGameObjectWithTag("MusicManager").GetComponent<AudioSource>();
 		musicManager.Play();
